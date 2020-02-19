@@ -1,0 +1,33 @@
+<mat-form-field class="p-2 ">
+	<mat-label>Search</mat-label>
+	<input
+		matInput
+		placeholder="Ex. Pizza"
+		[ngModel]="search"
+		(keyup)="filterSubject.next($event.target.value)"
+	/>
+	<button
+		mat-button
+		*ngIf="filter"
+		matSuffix
+		mat-icon-button
+		aria-label="Clear"
+		(click)="filterSubject.next('')"
+	>
+		<mat-icon>close</mat-icon>
+	</button>
+	<mat-hint>Start typing to see records</mat-hint>
+</mat-form-field>
+
+<app-table
+	[columns]="wikiColumns"
+	[pageSize]="pageSize"
+	selectKey="pageid"
+	[error]="error$| async"
+	[selectedIds$]="selectedIds$"
+	[items]="items$ | async"
+	[loading]="loading$ | async"
+	[itemsTotal]="itemsTotal$ | async"
+	(loadItems)="loadItems($event)"
+	(toggleItem)="toggleItem($event)"
+></app-table>

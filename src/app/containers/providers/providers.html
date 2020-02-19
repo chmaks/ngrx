@@ -1,0 +1,14 @@
+<nav mat-tab-nav-bar>
+	<a
+		mat-tab-link
+		*ngFor="let provider of providers"
+		[routerLink]="provider.path"
+		routerLinkActive
+		#rla="routerLinkActive"
+		[active]="provider.isActive"
+	>
+		{{provider.label}}
+	</a>
+</nav>
+
+<router-outlet></router-outlet>

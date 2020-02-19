@@ -1,0 +1,23 @@
+<h2 class="p-2">
+	Wiki List
+</h2>
+
+<app-table
+	[innerItems]="true"
+	[columns]="wikiColumns"
+	[items]="wikiItems$ | async"
+	(updateItem)="updateWiki($event)"
+>
+</app-table>
+
+<h2 class="p-2">
+	Imdb List
+</h2>
+
+<app-table
+	[innerItems]="true"
+	[columns]="imdbColumns"
+	[items]="imdbItems$ | async"
+	(updateItem)="updateImdb($event)"
+>
+</app-table>

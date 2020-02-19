@@ -1,0 +1,62 @@
+<div class="loader-wrap">
+	<div class="loader" *ngIf="loading">
+		<mat-spinner></mat-spinner>
+	</div>
+
+	<mat-table matSort [dataSource]="dataSource">
+		<ng-container *ngFor="let col of columns" matColumnDef="{{col.key}}">
+			<mat-header-cell *matHeaderCellDef [mat-sort-header]="col.sortKey" [disabled]="!col.sortKey">
+				{{col.title}}
+			</mat-header-cell>
+
+			<mat-cell *matCellDef="let data">
+				<container-element [ngSwitch]="col.type" class="w-100">
+					<ng-container *ngSwitchCase="columnTypeEnum.html">
+						<div [innerHTML]="data[col.key]"></div>
+					</ng-container>
+					<ng-container *ngSwitchCase="columnTypeEnum.notes">
+						<mat-form-field class="w-100">
+							<textarea
+								matInput
+								placeholder="Notes"
+								[(ngModel)]="data[col.key]"
+								(keyup)="noteSubject$.next(data)"
+							></textarea>
+						</mat-form-field>
+					</ng-container>
+					<ng-container *ngSwitchCase="columnTypeEnum.selection">
+						<mat-checkbox
+							[checked]="((selectedIds$ | async) || []).includes(data[selectKey])"
+							(change)="toggle($event, data)"
+						>
+						</mat-checkbox>
+					</ng-container>
+					<ng-container *ngSwitchCase="columnTypeEnum.date">
+						{{data[col.key] | date: 'medium'}}
+					</ng-container>
+					<ng-container *ngSwitchCase="columnTypeEnum.img">
+						<img [src]="data[col.key]" alt="img" class="item-img" />
+					</ng-container>
+					<ng-container *ngSwitchDefault>
+						{{data[col.key]}}
+					</ng-container>
+				</container-element>
+			</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+
+	<div *ngIf="(!dataSource || !dataSource.data.length) && !loading" class="p-2">
+		{{error}}
+	</div>
+
+	<mat-paginator
+		showFirstLastButtons
+		[length]="itemsTotal"
+		[pageSize]="pageSize"
+		[pageSizeOptions]="[5, 10, 20, 30, 40, 50]"
+	>
+	</mat-paginator>
+</div>
